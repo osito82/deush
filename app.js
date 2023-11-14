@@ -22,7 +22,14 @@ class Match {
       [],
       generateUniqueId()
     );
+
     match.players.push(player);
+  }
+
+  startGame() {
+    console.log('startGame')
+    dealer.dealCardsEachPlayer(2)
+    dealer.dealCardsDealer(3);
   }
 
   players = [];
@@ -47,6 +54,13 @@ wss.on("connection", (ws) => {
       match.signUpPlayer(jsonData);
       console.log(match.players);
     }
+
+    if (jsonData && jsonData.action === "startGame") {
+      match.startGame()
+      console.log(match.players);
+    }
+
+
   });
 
   // Manejar cierre de conexión
@@ -61,15 +75,17 @@ wss.on("connection", (ws) => {
 });
 
 //Mehotds Handling
-const dealer = new Dealer(100, [], shuffledDeck);
+const dealer = new Dealer(100, match.players, shuffledDeck);
 
 dealer.dealCards();
 dealer.showCards();
 //playerO.showCards();
 //player.showCards();
-dealer.dealCardsDealer(3);
-dealer.showCards();
+
+//dealer.showCards();
+//dealer.dealCardsEachPlayer(2)
 //console.log(match.deck, "xxx");
+
 let game = {
   gameNumber: match.MATCH_NUMBER,
   //originalDeck: match.originalDeck,

@@ -6,6 +6,12 @@ Player signUp
 "totalChips":1000
 }
 
+
+Start the game
+{
+"action": "startGame"
+}
+
 Player Ask
 {
 "name":"osito",

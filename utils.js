@@ -1,3 +1,7 @@
+//const { v4 } = require('uuidv4');
+const { v4: uuidv4 } = require('uuid')
+
+
 function shuffle(array) {
   let currentIndex = array.length,
     randomIndex;
@@ -16,7 +20,7 @@ function shuffle(array) {
 }
 
 function generateUniqueId() {
-  return Math.random().toString(36).substr(2, 9);
+  return uuidv4();
 }
 
 module.exports = { shuffle, generateUniqueId };
