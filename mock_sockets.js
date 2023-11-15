@@ -19,6 +19,11 @@
   action: "startGame",
 };
 
+//Log
+const log = {
+    action: "log",
+  };
+
 //Player Ask
  const askCard = {
   name: "osito",
@@ -31,3 +36,4 @@ exports.askCard = askCard
 exports.signUp = signUp
 exports.startGame = startGame
 exports.initialBet = initialBet
+exports.log = log

@@ -13,6 +13,12 @@ class Player {
     this.cards.push(card);
   }
 
+    //get number how many cards
+    countCards() {
+      return this.cards.length
+    //  this.cards.push(card);
+    }
+
   // Método para obtener un jugador por su ID
   getPlayer(playersArray, playerId) {
     return playersArray.find((player) => player.id === playerId);

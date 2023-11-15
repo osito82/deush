@@ -20,7 +20,9 @@ function shuffle(array) {
 }
 
 function generateUniqueId() {
-  return uuidv4();
+  const fullUUID = uuidv4();
+  const shortUUID = fullUUID.substr(0, 7).replace(/-/g, '');
+  return shortUUID;
 }
 
 module.exports = { shuffle, generateUniqueId };

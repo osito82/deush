@@ -21,16 +21,37 @@ socket.addEventListener("open", (event) => {
   const handleCommand = (command) => {
     switch (command) {
       case "signUp":
+        case "su":
+        sendCommand(mockTest['signUp']);
+        break;
+        
       case "initialBet":
+        case "ib":
+        sendCommand(mockTest['initialBet']);
+        break;
       case "startGame":
+        case "sg":
+        sendCommand(mockTest['startGame']);
+        break;
+      
+      case "ac":
       case "askCard":
-        sendCommand(mockTest[command]);
+        sendCommand(mockTest['askCard']);
         break;
       case "close":
         console.log("Cerrando conexión.");
         socket.close();
         rl.close(); // Cerrar la interfaz de línea de comandos
         break;
+
+        //DEVELOPMENT COMMANDS
+        case "log":
+          case "lg":
+            case "LOG":
+
+          sendCommand(mockTest['log']);
+          break;
+
       default:
         console.log("Comando no reconocido");
     }

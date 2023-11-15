@@ -14,6 +14,10 @@ class Dealer {
   dealCardsEachPlayer(numberOfCards = 1) {
     for (let i = 0; i < numberOfCards; i++) {
       this.players.forEach((player) => {
+      
+       // console.log('cerotes', player.countCards()  )
+        if (player.countCards() >= 2) return;
+
         const cardToDeal = this.deck.shift();
         if (cardToDeal) {
           player.setCard(cardToDeal);

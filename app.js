@@ -1,5 +1,7 @@
 //const { shuffleDeck, cards, dealCards } = require("./deck");
 const express = require("express");
+const R = require('radash');
+
 const http = require("http");
 const WebSocket = require("ws");
 const { generateUniqueId } = require("./utils");
@@ -12,19 +14,29 @@ const Dealer = require("./dealer");
 const Deck = require("./deck");
 const e = require("express");
 class Match {
-  MATCH_NUMBER = 554854;
-  NUMBER_PLAYERS = 2;
+  //NUMBER_PLAYERS = 2;
+
+  log(thisPlayer) {
+    console.log("******** LOG ***************");
+    console.log("MyId:", thisPlayer.id);
+    console.log("players", JSON.stringify(match.players));
+    console.log("pot", match.pot);
+    console.log("******** *** ***************");
+  }
 
   signUpPlayer(data, id) {
     console.log("signUpPlayer");
     const player = new Player(data.name, data.totalChips, [], id);
 
-    match.players.push(player);
+    const foundPlayer = match.players.find((myPlayer) => myPlayer.id == id);
+
+    if (!foundPlayer) match.players.push(player);
   }
 
   initialBet(player, chipsToBet) {
     console.log("initialBet");
-    if (match.players == []) {
+    //if (match.players == []) {
+      if (R.isEmpty(match.players)) {
       console.log("There are no players");
       console.log("Run signUp");
       return;
@@ -53,7 +65,7 @@ class Match {
     // Realiza operaciones con el jugador, por ejemplo:
     //     const chipsToBet = 10;
     const betResult = foundPlayer.setBet(chipsToBet);
-    this.pot = this.pot+chipsToBet
+    this.pot = this.pot + chipsToBet;
     console.log(betResult);
     console.log(foundPlayer);
     // }
@@ -66,12 +78,14 @@ class Match {
   }
 
   players = [];
-  pot = 0
+  pot = 0;
+  MATCH_NUMBER = 554854;
 }
 
 const match = new Match();
 
 const shuffledDeck = Deck.shuffleDeck(Deck.cards, 101);
+
 wss.on("connection", (ws) => {
   // Crear un nuevo jugador y asociarlo con la conexión WebSocket
   const thisPlayer = { id: generateUniqueId(), socket: ws };
@@ -93,7 +107,7 @@ wss.on("connection", (ws) => {
 
     if (jsonData && jsonData.action === "signUp2") {
       match.signUpPlayer(jsonData, generateUniqueId()); //dos jugadores
-      console.log(match.players);
+      //console.log(match.players);
     }
 
     if (jsonData && jsonData.action === "initialBet") {
@@ -111,6 +125,11 @@ wss.on("connection", (ws) => {
     if (jsonData && jsonData.action === "startGame") {
       match.startGame();
       console.log(match.players);
+    }
+
+    if (jsonData && jsonData.action === "log") {
+      match.log(thisPlayer);
+      // console.log(match.players);
     }
   });
 
