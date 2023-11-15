@@ -10,29 +10,63 @@ const wss = new WebSocket.Server({ server });
 const Player = require("./player");
 const Dealer = require("./dealer");
 const Deck = require("./deck");
+const e = require("express");
 class Match {
   MATCH_NUMBER = 554854;
   NUMBER_PLAYERS = 2;
 
-  signUpPlayer(data) {
+  signUpPlayer(data, id) {
     console.log("signUpPlayer");
-    const player = new Player(
-      data.name,
-      data.totalChips,
-      [],
-      generateUniqueId()
-    );
+    const player = new Player(data.name, data.totalChips, [], id);
 
     match.players.push(player);
   }
 
+  initialBet(player, chipsToBet) {
+    console.log("initialBet");
+    if (match.players == []) {
+      console.log("There are no players");
+      console.log("Run signUp");
+      return;
+    }
+
+    //console.log(player);
+
+    //const player = this.players[0];\
+    //const index = this.players.indexOf(player);
+    console.log(player.id, match.players);
+    const foundPlayer = match.players.find(
+      (myPlayer) => myPlayer.id == player.id
+    );
+
+    /*  let foundPlayer = match.players.find((myPlayer) => {
+      console.log(myPlayer.id, "playes in list");
+      console.log(player.id, "player.id - yo");
+        myPlayer.id == player.id;
+    }); */
+
+    //console.log(foundPlayer, "xxx");
+    //if (index !== -1) {
+    // El jugador se encontró en el array
+    //const player = this.players[index];
+
+    // Realiza operaciones con el jugador, por ejemplo:
+    //     const chipsToBet = 10;
+    const betResult = foundPlayer.setBet(chipsToBet);
+    this.pot = this.pot+chipsToBet
+    console.log(betResult);
+    console.log(foundPlayer);
+    // }
+  }
+
   startGame() {
-    console.log('startGame')
-    dealer.dealCardsEachPlayer(2)
+    console.log("startGame");
+    dealer.dealCardsEachPlayer(2);
     dealer.dealCardsDealer(3);
   }
 
   players = [];
+  pot = 0
 }
 
 const match = new Match();
@@ -46,21 +80,38 @@ wss.on("connection", (ws) => {
   ws.on("message", (data) => {
     //console.log(message)
     let jsonData;
+
     if (data) {
       jsonData = JSON.parse(data);
     }
-
+    //console.log(jsonData)
     if (jsonData && jsonData.action === "signUp") {
-      match.signUpPlayer(jsonData);
+      match.signUpPlayer(jsonData, thisPlayer.id);
+
       console.log(match.players);
+    }
+
+    if (jsonData && jsonData.action === "signUp2") {
+      match.signUpPlayer(jsonData, generateUniqueId()); //dos jugadores
+      console.log(match.players);
+    }
+
+    if (jsonData && jsonData.action === "initialBet") {
+      //try {
+
+      const chipsToBet = jsonData.chipsToBet;
+      // console.log(chipsToBet, 'chipps to bea5')
+      match.initialBet(thisPlayer, chipsToBet);
+      // console.log(match.players);
+      // } catch (error) {
+      //     console.log('error, ' ,error)
+      // }
     }
 
     if (jsonData && jsonData.action === "startGame") {
-      match.startGame()
+      match.startGame();
       console.log(match.players);
     }
-
-
   });
 
   // Manejar cierre de conexión
@@ -86,11 +137,11 @@ dealer.showCards();
 //dealer.dealCardsEachPlayer(2)
 //console.log(match.deck, "xxx");
 
-let game = {
-  gameNumber: match.MATCH_NUMBER,
-  //originalDeck: match.originalDeck,
-  players: match.players,
-};
+// let game = {
+//   gameNumber: match.MATCH_NUMBER,
+//   //originalDeck: match.originalDeck,
+//   players: match.players,
+// };
 
 //123queso
 

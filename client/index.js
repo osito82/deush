@@ -1,17 +1,62 @@
 const WebSocket = require("ws");
+const readline = require("readline");
+const mockTest = require("../mock_sockets");
 
-const socket = new WebSocket('ws://localhost:3333');
+const socket = new WebSocket("ws://localhost:3333");
 
-socket.addEventListener('open', (event) => {
-  console.log('Conexión establecida con el servidor');
-
-  // Ahora que la conexión está abierta, puedes enviar mensajes
-  socket.send('Hola servidor, soy un nuevo jugador');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
 });
 
-socket.addEventListener('message', (event) => {
+socket.addEventListener("open", (event) => {
+  console.log("Conexión establecida con el servidor");
+
+  // Función para enviar un comando al servidor
+  const sendCommand = (command) => {
+    socket.send(JSON.stringify(command));
+  };
+
+  // Función para manejar el comando ingresado
+  const handleCommand = (command) => {
+    switch (command) {
+      case "signUp":
+      case "initialBet":
+      case "startGame":
+      case "askCard":
+        sendCommand(mockTest[command]);
+        break;
+      case "close":
+        console.log("Cerrando conexión.");
+        socket.close();
+        rl.close(); // Cerrar la interfaz de línea de comandos
+        break;
+      default:
+        console.log("Comando no reconocido");
+    }
+  };
+
+  // Función para solicitar un comando y manejarlo
+  const promptCommand = () => {
+    rl.question(
+      "Ingrese un comando: ",
+      (command) => {
+        handleCommand(command);
+        if (command !== "cerrar" && command !== "close") {
+            promptCommand();
+        }
+      }
+    );
+  };
+
+  
+  promptCommand();
+});
+
+socket.addEventListener("message", (event) => {
   console.log(`Mensaje del servidor: ${event.data}`);
 });
 
-// NOTA: No deberías enviar mensajes fuera del evento 'open' para evitar el error
-// de enviar mensajes antes de que la conexión esté completamente abierta.
+socket.addEventListener("close", (event) => {
+  console.log("Conexión cerrada");
+});
