@@ -3,30 +3,26 @@ const Dealer = require("./dealer");
 const Deck = require("./deck");
 
 const R = require("radash");
+const log = require("./log");
+
+
 class Match {
   //NUMBER_PLAYERS = 2;
 
-  constructor(pot) {
+  constructor() {
     //  this.players = players;
-    this.pot = pot;
+   // this.pot = pot;
     //this.totalChips = totalChips;
     //this.cards = cards;
     // console.log("PLAYER", name, "cards:", cards);
   }
-
+pot = 0
   players = [];
   // pot = 0;
   shuffledDeck = Deck.shuffleDeck(Deck.cards, 101);
   dealer = new Dealer(100, this.players, this.shuffledDeck);
 
-  log(thisPlayer) {
-    // const
-    console.log("******** LOG ***************");
-    console.log("MyId:", thisPlayer.id);
-    console.log("players", JSON.stringify(match.players));
-    console.log("pot", match.pot);
-    console.log("******** *** ***************");
-  }
+
 
   signUpPlayer(data, id) {
     console.log("signUpPlayer");
@@ -70,8 +66,8 @@ class Match {
     //     const chipsToBet = 10;
     const betResult = foundPlayer.setBet(chipsToBet);
     this.pot = this.pot + chipsToBet;
-    console.log(betResult);
-    console.log(foundPlayer);
+  //  console.log(betResult);
+  //  console.log(foundPlayer);
     // }
   }
 
@@ -79,7 +75,10 @@ class Match {
     console.log("startGame");
     this.dealer.dealCardsEachPlayer(2);
     this.dealer.dealCardsDealer(3);
+    //console.log(this.dealer.showCards())
+    log.add({'dealerCards':this.dealer.showCards()})
+    
   }
 }
 
-module.exports = Match;
+module.exports = new Match();

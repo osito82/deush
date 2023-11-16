@@ -78,7 +78,7 @@ socket.addEventListener("open", (event) => {
 });
 
 socket.addEventListener("message", (event) => {
-  console.log(`Mensaje del servidor: ${event.data}`);
+  console.log(`Mensaje del servidor: ${event}`);
 });
 
 socket.addEventListener("close", (event) => {

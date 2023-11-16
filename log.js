@@ -8,14 +8,9 @@ class Log {
   }
 
   add(item) {
-    console.log(item, "xxx");
-    console.log(item.id, "xxx");
-
-    //  const existingIndex = this.logEntries.findIndex(entry => entry.id === item.id);
-
     const timestamp = new Date();
     const timeString = timestamp.toLocaleTimeString();
-    const dateTime = `${timestamp.toLocaleDateString()} ${timeString}`
+    const dateTime = `${timestamp.toLocaleDateString()} ${timeString}`;
     //    if (existingIndex !== -1) {
     // Si ya existe un objeto con el mismo ID, actualiza la información
 
@@ -27,14 +22,22 @@ class Log {
     //  }
   }
 
+
+get(){
+   // const strToSend = this.logEntries.join(',')
+   // console.log(strToSend, '---------')
+   // return strToSend
+}
+
   print() {
     console.log("******** LOG ***************");
-    console.log(this.logEntries);
-    // this.logEntries.forEach(entry => {
-    //   console.log("Timestamp:", entry.timestamp);
-    //   console.log("Players:", JSON.stringify(entry.players));
-    //   console.log("******** *** ***************");
-    // });
+    //console.log(this.logEntries);
+    this.logEntries.forEach((entry) => {
+      //   console.log("Timestamp:", entry.timestamp);
+      //   console.log("Players:", JSON.stringify(entry.players));
+      console.log(entry);
+      //   console.log("******** *** ***************");
+    });
   }
 }
 
@@ -74,4 +77,4 @@ class Log {
 // }
 //}
 
-module.exports = Log;
+module.exports = new Log();

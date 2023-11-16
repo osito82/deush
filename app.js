@@ -10,11 +10,11 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const Log = require("./log");
-const Match = require("./match");
+const log = require("./log");
+const match = require("./match");
 
-const match = new Match(0);
-const log = new Log();
+//const match = new Match(0);
+//const log = new Log();
 
 wss.on("connection", (ws) => {
   // Crear un nuevo jugador y asociarlo con la conexión WebSocket
@@ -53,13 +53,12 @@ wss.on("connection", (ws) => {
       match.startGame();
       //console.log(match.players);
       log.add({ players: match.players });
+       
     }
 
     if (jsonData && jsonData.action === "log") {
-      //   match.log(thisPlayer);
-
       log.print();
-      // console.log(match.players);
+      ws.send(log.get())
     }
   });
 
@@ -96,3 +95,6 @@ app.get("/", (req, res) => res.send("hola mundo"));
 server.listen(3333, () => {
   console.log("Servidor escuchando en http://localhost:3333");
 });
+
+
+//module.export = log
