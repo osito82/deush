@@ -1,26 +1,25 @@
-//const { shuffleDeck, cards, dealCards } = require("./deck");
 const express = require("express");
 const R = require("radash");
 
 const http = require("http");
 const WebSocket = require("ws");
+
 const { generateUniqueId } = require("./utils");
+
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-//const Dealer = require("./dealer");
-
 const Log = require("./log");
 const Match = require("./match");
-//const express = require("express");
 
 const match = new Match(0);
-const log = new Log()
+const log = new Log();
+
 wss.on("connection", (ws) => {
   // Crear un nuevo jugador y asociarlo con la conexión WebSocket
   const thisPlayer = { id: generateUniqueId(), socket: ws };
-
+  log.add({ thisPlayer: thisPlayer.id });
   // Manejar mensajes del cliente
   ws.on("message", (data) => {
     //console.log(message)
@@ -53,13 +52,13 @@ wss.on("connection", (ws) => {
     if (jsonData && jsonData.action === "startGame") {
       match.startGame();
       //console.log(match.players);
-      log.add(match.players)
+      log.add({ players: match.players });
     }
 
     if (jsonData && jsonData.action === "log") {
-   //   match.log(thisPlayer);
-     log.add(thisPlayer.id)
-     log.print()
+      //   match.log(thisPlayer);
+
+      log.print();
       // console.log(match.players);
     }
   });
@@ -67,7 +66,7 @@ wss.on("connection", (ws) => {
   // Manejar cierre de conexión
   ws.on("close", () => {
     console.log(`Conexión cerrada para el jugador ${thisPlayer.id}`);
-    log.print()
+    log.print();
     // Remove user when disconects
     const index = match.players.indexOf(thisPlayer);
     if (index !== -1) {
@@ -92,7 +91,6 @@ wss.on("connection", (ws) => {
 //   //originalDeck: match.originalDeck,
 //   players: match.players,
 // };
-
 
 app.get("/", (req, res) => res.send("hola mundo"));
 server.listen(3333, () => {
