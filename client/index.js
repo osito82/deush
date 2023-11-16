@@ -22,15 +22,18 @@ socket.addEventListener("open", (event) => {
     switch (command) {
       case "signUp":
         case "su":
+          case "1":
         sendCommand(mockTest['signUp']);
         break;
         
       case "initialBet":
         case "ib":
+          case "2":
         sendCommand(mockTest['initialBet']);
         break;
       case "startGame":
         case "sg":
+          case "3":
         sendCommand(mockTest['startGame']);
         break;
       

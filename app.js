@@ -1,6 +1,6 @@
 //const { shuffleDeck, cards, dealCards } = require("./deck");
 const express = require("express");
-const R = require('radash');
+const R = require("radash");
 
 const http = require("http");
 const WebSocket = require("ws");
@@ -9,83 +9,14 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const Player = require("./player");
-const Dealer = require("./dealer");
-const Deck = require("./deck");
-const e = require("express");
-class Match {
-  //NUMBER_PLAYERS = 2;
+//const Dealer = require("./dealer");
 
-  log(thisPlayer) {
-    console.log("******** LOG ***************");
-    console.log("MyId:", thisPlayer.id);
-    console.log("players", JSON.stringify(match.players));
-    console.log("pot", match.pot);
-    console.log("******** *** ***************");
-  }
+const Log = require("./log");
+const Match = require("./match");
+//const express = require("express");
 
-  signUpPlayer(data, id) {
-    console.log("signUpPlayer");
-    const player = new Player(data.name, data.totalChips, [], id);
-
-    const foundPlayer = match.players.find((myPlayer) => myPlayer.id == id);
-
-    if (!foundPlayer) match.players.push(player);
-  }
-
-  initialBet(player, chipsToBet) {
-    console.log("initialBet");
-    //if (match.players == []) {
-      if (R.isEmpty(match.players)) {
-      console.log("There are no players");
-      console.log("Run signUp");
-      return;
-    }
-
-    //console.log(player);
-
-    //const player = this.players[0];\
-    //const index = this.players.indexOf(player);
-    console.log(player.id, match.players);
-    const foundPlayer = match.players.find(
-      (myPlayer) => myPlayer.id == player.id
-    );
-
-    /*  let foundPlayer = match.players.find((myPlayer) => {
-      console.log(myPlayer.id, "playes in list");
-      console.log(player.id, "player.id - yo");
-        myPlayer.id == player.id;
-    }); */
-
-    //console.log(foundPlayer, "xxx");
-    //if (index !== -1) {
-    // El jugador se encontró en el array
-    //const player = this.players[index];
-
-    // Realiza operaciones con el jugador, por ejemplo:
-    //     const chipsToBet = 10;
-    const betResult = foundPlayer.setBet(chipsToBet);
-    this.pot = this.pot + chipsToBet;
-    console.log(betResult);
-    console.log(foundPlayer);
-    // }
-  }
-
-  startGame() {
-    console.log("startGame");
-    dealer.dealCardsEachPlayer(2);
-    dealer.dealCardsDealer(3);
-  }
-
-  players = [];
-  pot = 0;
-  MATCH_NUMBER = 554854;
-}
-
-const match = new Match();
-
-const shuffledDeck = Deck.shuffleDeck(Deck.cards, 101);
-
+const match = new Match(0);
+const log = new Log()
 wss.on("connection", (ws) => {
   // Crear un nuevo jugador y asociarlo con la conexión WebSocket
   const thisPlayer = { id: generateUniqueId(), socket: ws };
@@ -111,10 +42,7 @@ wss.on("connection", (ws) => {
     }
 
     if (jsonData && jsonData.action === "initialBet") {
-      //try {
-
       const chipsToBet = jsonData.chipsToBet;
-      // console.log(chipsToBet, 'chipps to bea5')
       match.initialBet(thisPlayer, chipsToBet);
       // console.log(match.players);
       // } catch (error) {
@@ -124,11 +52,14 @@ wss.on("connection", (ws) => {
 
     if (jsonData && jsonData.action === "startGame") {
       match.startGame();
-      console.log(match.players);
+      //console.log(match.players);
+      log.add(match.players)
     }
 
     if (jsonData && jsonData.action === "log") {
-      match.log(thisPlayer);
+   //   match.log(thisPlayer);
+     log.add(thisPlayer.id)
+     log.print()
       // console.log(match.players);
     }
   });
@@ -136,6 +67,7 @@ wss.on("connection", (ws) => {
   // Manejar cierre de conexión
   ws.on("close", () => {
     console.log(`Conexión cerrada para el jugador ${thisPlayer.id}`);
+    log.print()
     // Remove user when disconects
     const index = match.players.indexOf(thisPlayer);
     if (index !== -1) {
@@ -145,10 +77,9 @@ wss.on("connection", (ws) => {
 });
 
 //Mehotds Handling
-const dealer = new Dealer(100, match.players, shuffledDeck);
 
-dealer.dealCards();
-dealer.showCards();
+//dealer.dealCards();
+//dealer.showCards();
 //playerO.showCards();
 //player.showCards();
 
@@ -162,7 +93,6 @@ dealer.showCards();
 //   players: match.players,
 // };
 
-//123queso
 
 app.get("/", (req, res) => res.send("hola mundo"));
 server.listen(3333, () => {
