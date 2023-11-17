@@ -13,9 +13,6 @@ const wss = new WebSocket.Server({ server });
 const log = require("./log");
 const match = require("./match");
 
-//const match = new Match(0);
-//const log = new Log();
-
 wss.on("connection", (ws) => {
   // Crear un nuevo jugador y asociarlo con la conexión WebSocket
   const thisPlayer = { id: generateUniqueId(), socket: ws };
@@ -28,18 +25,15 @@ wss.on("connection", (ws) => {
     if (data) {
       jsonData = JSON.parse(data);
     }
-    //console.log(jsonData)
-    if (jsonData && jsonData.action === "signUp") {
-      log.add({step: "1. Sign Up"})
-      match.signUpPlayer(jsonData, thisPlayer.id);
 
-    //  console.log(match.players);
+    if (jsonData && jsonData.action === "signUp") {
+      log.add({ step: "1. Sign Up" });
+      match.signUpPlayer(jsonData, thisPlayer.id);
     }
 
     if (jsonData && jsonData.action === "dealtPrivateCards") {
-     match.dealtPrivateCards();
-log.add({step: "2. Dealt Private Cards"})
-    //  console.log(match.players);
+      match.dealtPrivateCards();
+      log.add({ step: "2. Dealt Private Cards" });
     }
 
     if (jsonData && jsonData.action === "signUp2") {
@@ -48,25 +42,19 @@ log.add({step: "2. Dealt Private Cards"})
     }
 
     if (jsonData && jsonData.action === "initialBet") {
-      log.add({step: "3. Initial Bet"})
+      log.add({ step: "3. Initial Bet" });
       const chipsToBet = jsonData.chipsToBet;
       match.initialBet(thisPlayer, chipsToBet);
-      // console.log(match.players);
-      // } catch (error) {
-      //     console.log('error, ' ,error)
-      // }
     }
 
     if (jsonData && jsonData.action === "startGame") {
       match.startGame();
-      //console.log(match.players);
       log.add({ players: match.players });
-       
     }
 
     if (jsonData && jsonData.action === "log") {
       log.print();
-      ws.send(log.get())
+      ws.send(log.get());
     }
   });
 
@@ -82,27 +70,9 @@ log.add({step: "2. Dealt Private Cards"})
   });
 });
 
-//Mehotds Handling
-
-//dealer.dealCards();
-//dealer.showCards();
-//playerO.showCards();
-//player.showCards();
-
-//dealer.showCards();
-//dealer.dealCardsEachPlayer(2)
-//console.log(match.deck, "xxx");
-
-// let game = {
-//   gameNumber: match.MATCH_NUMBER,
-//   //originalDeck: match.originalDeck,
-//   players: match.players,
-// };
-
 app.get("/", (req, res) => res.send("hola mundo"));
 server.listen(3333, () => {
   console.log("Servidor escuchando en http://localhost:3333");
 });
-
 
 //module.export = log

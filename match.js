@@ -19,18 +19,18 @@ class Match {
   dealer = new Dealer(this.gameId, this.players, this.shuffledDeck);
 
   signUpPlayer(data, id) {
-    console.log("signUpPlayer");
+    console.log("MATCH - signUpPlayer");
     const player = new Player(this.gameId, data.name, data.totalChips, [], id);
     const foundPlayer = this.players.find((myPlayer) => myPlayer.id == id);
     if (!foundPlayer) this.players.push(player);
   }
 
   dealtPrivateCards() {
-    console.log("2 - dealtPrivateCards");
+    console.log("MATCH - dealtPrivateCards");
     this.dealer.dealCardsEachPlayer(2);
   }
 
-  initialBet(player, chipsToBet) {
+  initialBet(thisPlayer, chipsToBet) {
     console.log("MATCH - initialBet");
     if (R.isEmpty(this.players)) {
       //todo -> send mensaje consola
@@ -38,12 +38,14 @@ class Match {
     }
 
     const foundPlayer = this.players.find(
-      (myPlayer) => myPlayer.id == player.id
+      (myPlayer) => myPlayer.id == thisPlayer.id
     );
 
     //const betResult =
     foundPlayer.setBet(chipsToBet);
+
     this.pot = this.pot + chipsToBet;
+
     log.add({
       thisBet: {
         gameId: this.gameId,
@@ -51,16 +53,13 @@ class Match {
         thisGameBet: foundPlayer.getThisGameBet(),
       },
     });
-    //  console.log(betResult);
-    //  console.log(foundPlayer);
-    // }
   }
 
   startGame() {
-    console.log("startGame");
+    console.log("MATCH - startGame");
 
     this.dealer.dealCardsDealer(3);
-    //console.log(this.dealer.showCards())
+    
     log.add({ dealerCards: this.dealer.showCards() });
   }
 }
