@@ -1,4 +1,4 @@
-//Player signUp
+//Player signUp - 1
  const signUp = {
   name: "osito",
   game: "48848484QR",
@@ -6,10 +6,17 @@
   totalChips: 1000,
 };
 
+//Start the game
+const dealtPrivateCards = {
+    action: "dealtPrivateCards",
+  };
+
+
+
 //Player Initial Bet
  const initialBet = {
-  name: "osito",
-  game: "48848484QR",
+ // name: "osito",
+ // game: "48848484QR",
   chipsToBet: 20,
   action: "initialBet",
 };
@@ -36,4 +43,5 @@ exports.askCard = askCard
 exports.signUp = signUp
 exports.startGame = startGame
 exports.initialBet = initialBet
+exports.dealtPrivateCards = dealtPrivateCards
 exports.log = log

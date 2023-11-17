@@ -26,14 +26,21 @@ socket.addEventListener("open", (event) => {
         sendCommand(mockTest['signUp']);
         break;
         
+        case "dealtPrivateCards":
+          case "dp":
+            case "2":
+          sendCommand(mockTest['dealtPrivateCards']);
+          break;
+
+
       case "initialBet":
         case "ib":
-          case "2":
+          case "3":
         sendCommand(mockTest['initialBet']);
         break;
       case "startGame":
         case "sg":
-          case "3":
+          case "4":
         sendCommand(mockTest['startGame']);
         break;
       

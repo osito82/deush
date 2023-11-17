@@ -1,38 +1,47 @@
 class Player {
-  constructor(name, totalChips, cards, id) {
+  constructor(gameId, name, chips, cards, id) {
+    this.gameId = gameId;
     this.id = id;
     this.name = name;
-    this.totalChips = totalChips;
+    this.chips = chips;
+    //this.
     this.cards = cards;
-    console.log("PLAYER", name, "cards:", cards);
-    
+    //console.log("PLAYER", name, "cards:", cards);
   }
-
+  thisGameBet = 0;
   //receives cards
   setCard(card) {
     this.cards.push(card);
   }
 
-    //get number how many cards
-    countCards() {
-      return this.cards.length
+  //get number how many cards
+  countCards() {
+    return this.cards.length;
     //  this.cards.push(card);
-    }
+  }
 
   // Método para obtener un jugador por su ID
   getPlayer(playersArray, playerId) {
     return playersArray.find((player) => player.id === playerId);
   }
+
+  getPlayerId = () => {
+    return this.id;
+  };
+  getThisGameBet = () => {
+    return this.thisGameBet;
+  };
   //}
   setBet(chipsToBet) {
-    let betSet = false
-    if (chipsToBet > this.totalChips) {
+    let betSet = false;
+    if (chipsToBet > this.chips) {
       return "no enough chips";
     } else {
-      this.totalChips -= chipsToBet;
-      betSet = true
+      this.chips -= chipsToBet;
+      this.thisGameBet += chipsToBet;
+      betSet = true;
     }
-    return betSet
+    return betSet;
   }
   //}
 

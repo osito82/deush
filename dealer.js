@@ -1,25 +1,19 @@
-//const { cards, dealCards } = require("./deck");
-// const Log = require("./log");
-// const log = new Log();
-///const log = require("./log");
 class Dealer {
-  
-  constructor(chips, players, deck) {
-    this.id = "0001P";
+  constructor(gameId, players, deck) {
+    this.gameId = gameId;
     this.deck = deck;
-    this.chips = chips;
+    
     this.players = players;
-    console.log("DEALER", "deck:", deck, "players", players);
   }
 
   cards = [];
 
   dealCardsEachPlayer(numberOfCards = 1) {
+    //console.log(this.players, '-------')
     for (let i = 0; i < numberOfCards; i++) {
       this.players.forEach((player) => {
-      
-       // console.log('cerotes', player.countCards()  )
-        if (player.countCards() >= 2) return;
+        // console.log('cerotes', player.countCards()  )
+        if (player.countCards() == 2) return;
 
         const cardToDeal = this.deck.shift();
         if (cardToDeal) {
@@ -31,7 +25,6 @@ class Dealer {
     }
   }
 
-  
   dealCardsDealer(numberOfCards = 1) {
     for (let i = 0; i < numberOfCards; i++) {
       const cardToDeal = this.deck.shift();
@@ -41,8 +34,6 @@ class Dealer {
         console.log("No hay cartas suficientes en el mazo.");
       }
     }
- //   log.add('dealerCards','xxx')
-    //log.add('dealerCards', this.showCards())
   }
 
   setCard(card) {
@@ -59,8 +50,8 @@ class Dealer {
   }
 
   showCards() {
-   // console.log('sssssssshpw', this.cards)
-   //log.
+    // console.log('sssssssshpw', this.cards)
+    //log.
     return this.cards;
     // console.log("dealer - showCards");
     // console.log("dealer deck", this.deck);

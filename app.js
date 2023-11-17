@@ -30,9 +30,16 @@ wss.on("connection", (ws) => {
     }
     //console.log(jsonData)
     if (jsonData && jsonData.action === "signUp") {
+      log.add({step: "1. Sign Up"})
       match.signUpPlayer(jsonData, thisPlayer.id);
 
-      console.log(match.players);
+    //  console.log(match.players);
+    }
+
+    if (jsonData && jsonData.action === "dealtPrivateCards") {
+     match.dealtPrivateCards();
+log.add({step: "2. Dealt Private Cards"})
+    //  console.log(match.players);
     }
 
     if (jsonData && jsonData.action === "signUp2") {
@@ -41,6 +48,7 @@ wss.on("connection", (ws) => {
     }
 
     if (jsonData && jsonData.action === "initialBet") {
+      log.add({step: "3. Initial Bet"})
       const chipsToBet = jsonData.chipsToBet;
       match.initialBet(thisPlayer, chipsToBet);
       // console.log(match.players);
