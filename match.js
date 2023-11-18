@@ -18,10 +18,29 @@ class Match {
   shuffledDeck = Deck.shuffleDeck(Deck.cards, 101);
   dealer = new Dealer(this.gameId, this.players, this.shuffledDeck);
 
-  signUpPlayer(data, id) {
+  signUpPlayer(data, thisPlayerId) {
     console.log("MATCH - signUpPlayer");
-    const player = new Player(this.gameId, data.name, data.totalChips, [], id);
-    const foundPlayer = this.players.find((myPlayer) => myPlayer.id == id);
+
+    if (this.players.length >= 10) {
+      console.log("Max Ten Players"); //todo max players
+      return;
+    }
+
+    const player = new Player(
+      this.gameId,
+      data.name,
+      data.totalChips,
+      [],
+      thisPlayerId
+    );
+    const foundPlayer = this.players.find(
+      (myPlayer) => myPlayer.id == thisPlayerId
+    );
+
+    const playerNumber = this.players.length + 1;
+
+    player.setPlayerNumber(playerNumber);
+
     if (!foundPlayer) this.players.push(player);
   }
 
@@ -30,6 +49,7 @@ class Match {
     this.dealer.dealCardsEachPlayer(2);
   }
 
+  
   initialBet(thisPlayer, chipsToBet) {
     console.log("MATCH - initialBet");
     if (R.isEmpty(this.players)) {
@@ -59,7 +79,7 @@ class Match {
     console.log("MATCH - startGame");
 
     this.dealer.dealCardsDealer(3);
-    
+
     log.add({ dealerCards: this.dealer.showCards() });
   }
 }

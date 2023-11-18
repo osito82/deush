@@ -4,14 +4,18 @@ class Player {
     this.id = id;
     this.name = name;
     this.chips = chips;
-    //this.
     this.cards = cards;
-    //console.log("PLAYER", name, "cards:", cards);
   }
+  playerNumber = 0;
   thisGameBet = 0;
+  
   //receives cards
   setCard(card) {
     this.cards.push(card);
+  }
+
+  setPlayerNumber(number) {
+    this.playerNumber = number;
   }
 
   //get number how many cards
