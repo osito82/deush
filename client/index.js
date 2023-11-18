@@ -12,12 +12,10 @@ const rl = readline.createInterface({
 socket.addEventListener("open", (event) => {
   console.log("Conexión establecida con el servidor");
 
-  // Función para enviar un comando al servidor
   const sendCommand = (command) => {
     socket.send(JSON.stringify(command));
   };
 
-  // Función para manejar el comando ingresado
   const handleCommand = (command) => {
     switch (command) {
       case "signUp":
@@ -50,7 +48,7 @@ socket.addEventListener("open", (event) => {
       case "close":
         console.log("Cerrando conexión.");
         socket.close();
-        rl.close(); // Cerrar la interfaz de línea de comandos
+        rl.close();
         break;
 
       //DEVELOPMENT COMMANDS
@@ -74,8 +72,7 @@ socket.addEventListener("open", (event) => {
 
               mockTest.sendMessage.targetPlayerId = playerId;
               mockTest.sendMessage.targetMessage = msg;
-              //  console.log(mockTest.sendMessage, 'xxx')
-              // Ahora puedes enviar el mensaje con los datos ingresados por el usuario
+
               sendCommand(mockTest["sendMessage"]);
               promptCommand();
             }
@@ -109,17 +106,6 @@ socket.addEventListener("open", (event) => {
   };
 
   promptCommand();
-
-  //   const promptCommand = () => {
-  //     rl.question("Ingrese un comando: ", (command) => {
-  //       handleCommand(command);
-  //       if (command !== "cerrar" && command !== "close") {
-  //         promptCommand();
-  //       }
-  //     });
-  //   };
-
-  //   promptCommand();
 });
 
 socket.addEventListener("message", (event) => {

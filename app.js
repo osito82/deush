@@ -12,14 +12,13 @@ const wss = new WebSocket.Server({ server });
 
 const log = require("./log");
 const match = require("./match");
+const Socket = require("./sockets");
 
 wss.on("connection", (ws) => {
-  const thisPlayer = { id: generateUniqueId(), socket: ws };
-
-  log.add({ thisPlayer: thisPlayer.id });
+  const thisSocket = { id: generateUniqueId(), socket: ws };
+  Socket.addSocket(thisSocket);
 
   ws.on("message", (data) => {
-    //console.log(message)
     let jsonData;
 
     if (data) {
@@ -27,7 +26,6 @@ wss.on("connection", (ws) => {
         jsonData = JSON.parse(data);
       } catch (error) {
         console.error("Error al analizar el JSON:", error);
-        // Puedes enviar un mensaje de error al cliente si es necesario
         ws.send(JSON.stringify({ error: "Formato JSON no válido" }));
         return;
       }
@@ -36,53 +34,27 @@ wss.on("connection", (ws) => {
     if (jsonData && jsonData.action === "sendMessage") {
       const targetPlayerId = jsonData.targetPlayerId;
       const targetMessage = jsonData.targetMessage;
-      console.log(jsonData);
 
+      const targetSocket = Socket.getSocket(targetPlayerId);
 
-      // Encuentra el socket del jugador objetivo
-      // const targetSocket = findSocketByPlayerId(targetPlayerId);
-
-      const targetPlayer = match.players.find((player) => {
-      //  console.log(player , '0021 -1 548')
-        return player.id === targetPlayerId;
-      });
-
-      // const targetPlayer = match.players.find(
-      //   (player) => {player.id === targetPlayerId
-      //  console.log(player)
-      //   console.log(player.id)
-      //    console.log(targetPlayerId)
-      //}
-      // );
-    //  console.log(targetPlayer), "88888";
-      // if (targetSocket) {
-      if (targetPlayer && targetPlayer.socket) {
-        //console.log('xxx')
-        // Envía el mensaje al jugador objetivo
-        targetPlayer.socket.send(
-      //    targetMessage
-  //    "123 queso"
-           JSON.stringify({ 'message': targetMessage })
-        );
+      if (targetSocket && targetSocket.socket) {
+        targetSocket.socket.send(JSON.stringify({ message: targetMessage }));
       } else {
         console.log(
           `Jugador con ID ${targetPlayerId} no encontrado o sin socket`
         );
-        return;
       }
-      // }
-      // return
     }
 
     if (jsonData && jsonData.action === "signUp") {
       log.add({ step: "1. Sign Up" });
-      match.signUpPlayer(jsonData, thisPlayer.id, thisPlayer.socket);
+      match.signUpPlayer(jsonData, thisSocket.id);
     }
 
     if (jsonData && jsonData.action === "initialBet") {
       log.add({ step: "2. Initial Bet" });
       const chipsToBet = jsonData.chipsToBet;
-      match.initialBet(thisPlayer, chipsToBet);
+      match.initialBet(thisSocket.id, chipsToBet);
     }
 
     if (jsonData && jsonData.action === "dealtPrivateCards") {
@@ -104,8 +76,8 @@ wss.on("connection", (ws) => {
 
   // Manejar cierre de conexión
   ws.on("close", () => {
-    console.log(`Conexión cerrada para el jugador ${thisPlayer.id}`);
-    log.print();
+    console.log(`Conexión cerrada para el jugador ${thisSocket.id}`);
+
     // Remove user when disconects
     const index = match.players.indexOf(thisPlayer);
     if (index !== -1) {
@@ -118,5 +90,3 @@ app.get("/", (req, res) => res.send("hola mundo"));
 server.listen(3333, () => {
   console.log("Servidor escuchando en http://localhost:3333");
 });
-
-//module.export = log
