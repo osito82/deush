@@ -14,21 +14,69 @@ const log = require("./log");
 const match = require("./match");
 
 wss.on("connection", (ws) => {
-  // Crear un nuevo jugador y asociarlo con la conexión WebSocket
   const thisPlayer = { id: generateUniqueId(), socket: ws };
+
   log.add({ thisPlayer: thisPlayer.id });
-  // Manejar mensajes del cliente
+
   ws.on("message", (data) => {
     //console.log(message)
     let jsonData;
 
     if (data) {
-      jsonData = JSON.parse(data);
+      try {
+        jsonData = JSON.parse(data);
+      } catch (error) {
+        console.error("Error al analizar el JSON:", error);
+        // Puedes enviar un mensaje de error al cliente si es necesario
+        ws.send(JSON.stringify({ error: "Formato JSON no válido" }));
+        return;
+      }
+    }
+
+    if (jsonData && jsonData.action === "sendMessage") {
+      const targetPlayerId = jsonData.targetPlayerId;
+      const targetMessage = jsonData.targetMessage;
+      console.log(jsonData);
+
+
+      // Encuentra el socket del jugador objetivo
+      // const targetSocket = findSocketByPlayerId(targetPlayerId);
+
+      const targetPlayer = match.players.find((player) => {
+      //  console.log(player , '0021 -1 548')
+        return player.id === targetPlayerId;
+      });
+
+      // const targetPlayer = match.players.find(
+      //   (player) => {player.id === targetPlayerId
+      //  console.log(player)
+      //   console.log(player.id)
+      //    console.log(targetPlayerId)
+      //}
+      // );
+    //  console.log(targetPlayer), "88888";
+      // if (targetSocket) {
+      if (targetPlayer && targetPlayer.socket) {
+        //console.log('xxx')
+        // Envía el mensaje al jugador objetivo
+        targetPlayer.socket.send(
+      //    targetMessage
+  //    "123 queso"
+           JSON.stringify({ 'message': targetMessage })
+        );
+      } else {
+        console.log(
+          `Jugador con ID ${targetPlayerId} no encontrado o sin socket`
+        );
+        return;
+      }
+      // }
+      // return
     }
 
     if (jsonData && jsonData.action === "signUp") {
       log.add({ step: "1. Sign Up" });
-      match.signUpPlayer(jsonData, thisPlayer.id);
+      match.signUpPlayer(jsonData, thisPlayer.id, thisPlayer.socket);
     }
 
     if (jsonData && jsonData.action === "initialBet") {

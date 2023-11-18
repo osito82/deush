@@ -11,14 +11,17 @@ class Log {
     const timestamp = new Date();
     const timeString = timestamp.toLocaleTimeString();
     const dateTime = `${timestamp.toLocaleDateString()} ${timeString}`;
-    //    if (existingIndex !== -1) {
-    // Si ya existe un objeto con el mismo ID, actualiza la información
+    const itemWithoutSocket = { ...item };
 
-    //    this.logEntries[existingIndex] = { item };
-    //  } else {
-    // Si no existe, agrega un nuevo objeto al log
+    //console.log(item, '15551545 0021')
+    if (itemWithoutSocket.hasOwnProperty('socket')) {
+        delete itemWithoutSocket.socket;
+      }
 
-    this.logEntries.push(dateTime + " - " + JSON.stringify(item));
+//console.log(item, 'xxxxxxxxxx4')
+
+
+    this.logEntries.push(dateTime + " - " + JSON.stringify(itemWithoutSocket));
     //  }
   }
 

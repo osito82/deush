@@ -18,7 +18,7 @@ class Match {
   shuffledDeck = Deck.shuffleDeck(Deck.cards, 101);
   dealer = new Dealer(this.gameId, this.players, this.shuffledDeck);
 
-  signUpPlayer(data, thisPlayerId) {
+  signUpPlayer(data, thisPlayerId, thisPlayerSocket) {
     console.log("MATCH - signUpPlayer");
 
     if (this.players.length >= 10) {
@@ -31,7 +31,8 @@ class Match {
       data.name,
       data.totalChips,
       [],
-      thisPlayerId
+      thisPlayerId,
+      thisPlayerSocket
     );
     const foundPlayer = this.players.find(
       (myPlayer) => myPlayer.id == thisPlayerId
@@ -49,7 +50,10 @@ class Match {
     this.dealer.dealCardsEachPlayer(2);
   }
 
-  
+  watchDog(phase, thisPlayer, players, chipsToBet) {
+    //todo
+  }
+
   initialBet(thisPlayer, chipsToBet) {
     console.log("MATCH - initialBet");
     if (R.isEmpty(this.players)) {

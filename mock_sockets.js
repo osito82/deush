@@ -26,6 +26,11 @@ const log = {
   action: "log",
 };
 
+//SendMessage
+const sendMessage = {
+  action: "sendMessage",
+};
+
 //Player Ask
 const askCard = {
   action: "askCard",
@@ -38,3 +43,4 @@ exports.startGame = startGame;
 exports.initialBet = initialBet;
 exports.dealtPrivateCards = dealtPrivateCards;
 exports.log = log;
+exports.sendMessage = sendMessage;

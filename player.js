@@ -1,14 +1,16 @@
 class Player {
-  constructor(gameId, name, chips, cards, id) {
+  constructor(gameId, name, chips, cards, id, socket) {
     this.gameId = gameId;
     this.id = id;
     this.name = name;
     this.chips = chips;
     this.cards = cards;
+    this.socket = socket;
+
   }
   playerNumber = 0;
   thisGameBet = 0;
-  
+
   //receives cards
   setCard(card) {
     this.cards.push(card);
@@ -32,6 +34,7 @@ class Player {
   getPlayerId = () => {
     return this.id;
   };
+  
   getThisGameBet = () => {
     return this.thisGameBet;
   };
