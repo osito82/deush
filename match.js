@@ -79,32 +79,47 @@ class Match {
 
     if (bettingFor == "blinds") {
       //smallBlind Ask for bet P1
-      if (!this.dealer.hasPlayerBet(1))
+      if (!this.dealer.hasPlayerBet(1)) {
         this.dealer.talkToPLayer(1, "P1 - Please make your bet");
-      //bigBlind Ask for bet P2
-      if (!this.dealer.hasPlayerBet(2))
-        this.dealer.talkToPLayer(2, "P2 - Please make your bet");
+      } else {
+        this.stepChecker.passedStep("smallBlind");
+      }
 
-      if (this.dealer.hasPlayerBet(1) && this.dealer.hasPlayerBet(2)) {
-        return "{blinds:1}";
+      //bigBlind Ask for bet P2
+      if (!this.dealer.hasPlayerBet(2)) {
+        this.dealer.talkToPLayer(2, "P2 - Please make your bet");
+      } else {
+        this.stepChecker.passedStep("bigBlind");
       }
     }
-  }
-
-  step_betsOnBlinds() {
-    this.askForBets("blinds");
   }
 
   startGame() {
     console.log("MATCH - startGame");
 
+    //Sign Up Min 2 Playes
     if (!this.stepChecker.checkStep("signUp")) {
       this.dealer.talkToAllPlayers("Minimun 2 Players to Start");
     }
 
-    //todo si
-    if (this.dealer.hasPlayerBet(1) && this.dealer.hasPlayerBet(2))
-      this.dealer.dealCardsDealer(3);
+    //Blinds
+    const timerAskBlinds = () => {
+      
+      if (
+        !this.stepChecker.checkStep("bigBlind") ||
+        !this.stepChecker.checkStep("smallBlind")
+      ) {
+        this.askForBets("blinds");
+      } else {
+        clearInterval(intervalId);
+      }
+    };
+
+    const intervalId = setInterval(timerAskBlinds, 10000);
+
+    //   if (this.dealer.hasPlayerBet(1) && this.dealer.hasPlayerBet(2))
+
+    //      this.dealer.dealCardsDealer(3);
 
     log.add({ dealerCards: this.dealer.showCards() });
   }

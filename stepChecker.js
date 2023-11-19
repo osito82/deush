@@ -1,22 +1,19 @@
-//const log = require("./log");
-//console.log('steeep')
 class StepChecker {
   gameFlowOriginal = {
     gameId: "",
     signUp: false,
+    bigBlind: false,
+    smallBlind: false,
   };
 
   constructor(gameId) {
-    //console.log(gameId, "************");
     this.gamesArray = [];
     this.gameFlow = { ...this.gameFlowOriginal };
     this.gameFlow.gameId = gameId;
   }
 
   checkStep(step) {
-    console.log(this.gameFlow, "----------------");
-    console.log(this.gameFlow);
-    return this.gameFlow[step] || false;
+    return step in this.gameFlow ? this.gameFlow[step] : false;
   }
 
   passedStep(step) {
@@ -27,6 +24,6 @@ class StepChecker {
   reset() {
     this.gameFlow = { ...this.gameFlowOriginal };
   }
-} 
+}
 
 module.exports = StepChecker;
