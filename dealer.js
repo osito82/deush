@@ -79,6 +79,19 @@ class Dealer {
     }
   }
 
+  talkToAllPlayers(targetMessage) {
+    try {
+      for (const player of this.players) {
+        const playerId = player.id;
+        const targetSocket = Socket.getSocket(playerId);
+        targetSocket.socket.send(JSON.stringify({ message: targetMessage }));
+      }
+    } catch (error) {
+      console.log(error);
+      // todo
+    }
+  }
+
   showCards() {
     // console.log('sssssssshpw', this.cards)
     //log.
