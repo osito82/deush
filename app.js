@@ -52,8 +52,9 @@ wss.on("connection", (ws) => {
     }
 
     if (jsonData && jsonData.action === "initialBet") {
-      log.add({ step: "2. Initial Bet" });
+      log.add({ step: "Initial Bet" });
       const chipsToBet = jsonData.chipsToBet;
+      
       match.initialBet(thisSocket.id, chipsToBet);
     }
 
@@ -79,7 +80,7 @@ wss.on("connection", (ws) => {
     console.log(`Conexión cerrada para el jugador ${thisSocket.id}`);
 
     // Remove user when disconects
-    const index = match.players.indexOf(thisPlayer);
+    const index = match.players.indexOf(thisSocket);
     if (index !== -1) {
       match.players.splice(index, 1);
     }

@@ -12,7 +12,7 @@ const dealtPrivateCards = {
 
 //Player Initial Bet
 const initialBet = {
-  chipsToBet: 20,
+  //chipsToBet: 20,
   action: "initialBet",
 };
 

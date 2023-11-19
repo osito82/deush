@@ -1,8 +1,10 @@
+const Socket = require("./sockets");
+
 class Dealer {
   constructor(gameId, players, deck) {
     this.gameId = gameId;
     this.deck = deck;
-    
+
     this.players = players;
   }
 
@@ -47,6 +49,23 @@ class Dealer {
     this.deck.push(burnedCard); //
 
     this.dealCardsEachPlayer(2);
+  }
+
+  talkToPLayer(playerNumber, targetMessage) {
+    console.log("MATCH - talkToPLayer" + playerNumber);
+    try {
+      const foundPlayer = this.players.find(
+        (myPlayer) => myPlayer.playerNumber == playerNumber
+      );
+
+      if (foundPlayer) {
+        const playerId = foundPlayer.id;
+        const targetSocket = Socket.getSocket(playerId);
+        targetSocket.socket.send(JSON.stringify({ message: targetMessage }));
+      }
+    } catch (error) {
+      console.log(error); //todo
+    }
   }
 
   showCards() {

@@ -24,20 +24,33 @@ socket.addEventListener("open", (event) => {
         sendCommand(mockTest["signUp"]);
         break;
 
-      case "dealtPrivateCards":
-      case "dp":
-      case "2":
-        sendCommand(mockTest["dealtPrivateCards"]);
-        break;
-
       case "initialBet":
       case "ib":
       case "3":
-        sendCommand(mockTest["initialBet"]);
+        
+        rl.question(
+          " - Money to Bet: ",
+          (chipsToBet) => {
+            chipsToBet = Number(chipsToBet);
+            mockTest.initialBet.chipsToBet = chipsToBet;
+            sendCommand(mockTest["initialBet"]);
+            promptCommand();
+          }
+          //   );
+          //}
+        );
+
         break;
+
+      case "dealtPrivateCards":
+      case "dp":
+      case "4":
+        sendCommand(mockTest["dealtPrivateCards"]);
+        break;
+
       case "startGame":
       case "sg":
-      case "4":
+      case "2":
         sendCommand(mockTest["startGame"]);
         break;
 
@@ -45,6 +58,7 @@ socket.addEventListener("open", (event) => {
       case "askCard":
         sendCommand(mockTest["askCard"]);
         break;
+
       case "close":
         console.log("Cerrando conexión.");
         socket.close();
@@ -112,6 +126,6 @@ socket.addEventListener("message", (event) => {
   console.log(`Mensaje del servidor: ${event.data}`);
 });
 
-socket.addEventListener("close", (event) => {
+socket.addEventListener("close", () => {
   console.log("Conexión cerrada");
 });

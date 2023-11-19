@@ -29,6 +29,10 @@ class Player {
     return this.id;
   };
 
+  getChips = () => {
+    return this.chips;
+  };
+
   getThisGameBet = () => {
     return this.thisGameBet;
   };

@@ -49,7 +49,7 @@ class Match {
     this.dealer.dealCardsEachPlayer(2);
   }
 
-  watchDog(phase, thisSocket, players, chipsToBet) {
+  askForBets() {
     //todo
   }
 
@@ -62,6 +62,7 @@ class Match {
     const foundPlayer = this.players.find(
       (myPlayer) => myPlayer.id == thisSocketId
     );
+
     foundPlayer.setBet(chipsToBet);
 
     this.pot = this.pot + chipsToBet;
@@ -71,12 +72,18 @@ class Match {
         gameId: this.gameId,
         playerId: foundPlayer.getPlayerId(),
         thisGameBet: foundPlayer.getThisGameBet(),
+        chips: foundPlayer.getChips(),
       },
     });
   }
 
   startGame() {
     console.log("MATCH - startGame");
+
+    //smallBlind Ask for bet P1
+    this.dealer.talkToPLayer(1, "P1 - Please make your bet");
+    //bigBlind Ask for bet P2
+    this.dealer.talkToPLayer(2, "P2 - Please make your bet");
 
     this.dealer.dealCardsDealer(3);
 
