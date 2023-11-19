@@ -51,14 +51,25 @@ class Dealer {
     this.dealCardsEachPlayer(2);
   }
 
+  getPlayerByNumber(number) {
+    console.log("dealer - getPlayerByNumber");
+    const foundPlayer = this.players.find(
+      (myPlayer) => myPlayer.playerNumber == number
+    );
+    return foundPlayer;
+  }
+
+  hasPlayerBet(playerNUmber) {
+    const playerToCheck = this.getPlayerByNumber(playerNUmber);
+    return playerToCheck.getThisGameBet() !== 0;
+  }
+
   talkToPLayer(playerNumber, targetMessage) {
-    console.log("MATCH - talkToPLayer" + playerNumber);
     try {
-      const foundPlayer = this.players.find(
-        (myPlayer) => myPlayer.playerNumber == playerNumber
-      );
+      const foundPlayer = this.getPlayerByNumber(playerNumber);
 
       if (foundPlayer) {
+        console.log("MATCH - talkToPLayer" + playerNumber);
         const playerId = foundPlayer.id;
         const targetSocket = Socket.getSocket(playerId);
         targetSocket.socket.send(JSON.stringify({ message: targetMessage }));

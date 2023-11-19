@@ -26,7 +26,7 @@ socket.addEventListener("open", (event) => {
 
       case "initialBet":
       case "ib":
-      case "3":
+      //case "3":
         
         rl.question(
           " - Money to Bet: ",
@@ -44,7 +44,7 @@ socket.addEventListener("open", (event) => {
 
       case "dealtPrivateCards":
       case "dp":
-      case "4":
+      case "3":
         sendCommand(mockTest["dealtPrivateCards"]);
         break;
 

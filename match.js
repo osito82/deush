@@ -47,10 +47,8 @@ class Match {
   dealtPrivateCards() {
     console.log("MATCH - dealtPrivateCards");
     this.dealer.dealCardsEachPlayer(2);
-  }
 
-  askForBets() {
-    //todo
+    log.add({ players: this.players });
   }
 
   initialBet(thisSocketId, chipsToBet) {
@@ -68,23 +66,31 @@ class Match {
     this.pot = this.pot + chipsToBet;
 
     log.add({
-      thisBet: {
-        gameId: this.gameId,
-        playerId: foundPlayer.getPlayerId(),
-        thisGameBet: foundPlayer.getThisGameBet(),
-        chips: foundPlayer.getChips(),
+      initialBet: {
+        player: foundPlayer,
+        pot: this.pot,
       },
     });
+  }
+
+  askForBets(bettingFor) {
+    console.log("MATCH - askForBets");
+
+    if (bettingFor == "blinds") {
+      //smallBlind Ask for bet P1
+      this.dealer.talkToPLayer(1, "P1 - Please make your bet");
+      //bigBlind Ask for bet P2
+      this.dealer.talkToPLayer(2, "P2 - Please make your bet");
+    }
   }
 
   startGame() {
     console.log("MATCH - startGame");
 
-    //smallBlind Ask for bet P1
-    this.dealer.talkToPLayer(1, "P1 - Please make your bet");
-    //bigBlind Ask for bet P2
-    this.dealer.talkToPLayer(2, "P2 - Please make your bet");
+    this.askForBets("blinds");
 
+    //todo si
+    if (this.dealer.hasPlayerBet(1) && this.dealer.hasPlayerBet(2))
     this.dealer.dealCardsDealer(3);
 
     log.add({ dealerCards: this.dealer.showCards() });

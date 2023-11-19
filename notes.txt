@@ -3,7 +3,7 @@ Order:
 2. startGame - sg 
 -- If player 1 -> smallBlind - initialBet - ib
 -- If player 2 -> bigBlind - initialBet - ib
-
+3. dealtPrivateCards - dp
 
 
 JSON EXAMPLES

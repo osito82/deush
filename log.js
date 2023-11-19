@@ -18,11 +18,13 @@ class Log {
   }
 
   print() {
-    console.log("*************** LOG ***************");
+    console.log("*************** LOG START ***************");
 
     this.logEntries.forEach((entry) => {
       console.log(entry);
     });
+
+    console.log("*************** LOG END ***************");
   }
 }
 

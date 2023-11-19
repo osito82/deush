@@ -71,7 +71,7 @@ wss.on("connection", (ws) => {
 
     if (jsonData && jsonData.action === "log") {
       log.print();
-      ws.send(log.get());
+   //   ws.send(log.get());
     }
   });
 
