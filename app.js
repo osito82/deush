@@ -56,6 +56,18 @@ wss.on("connection", (ws) => {
       log.add({ step: "Fold" });
       match.fold(thisSocket.id);
 
+      //const targetSocket = Socket.getSocket(thisSocket.id);
+
+      // if (targetSocket && targetSocket.socket) {
+      //   targetSocket.socket.terminate();
+      // }
+    }
+
+
+    if (jsonData && jsonData.action === "close") {
+      log.add({ step: "Close" });
+      //match.fold(thisSocket.id);
+
       const targetSocket = Socket.getSocket(thisSocket.id);
 
       if (targetSocket && targetSocket.socket) {

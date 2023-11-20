@@ -61,9 +61,15 @@ socket.addEventListener("open", (event) => {
 
       case "fold":
       case "fd":
+        console.log("Fold");
+        sendCommand(mockTest["fold"]);
+        // socket.close();  // Cierra la conexión WebSocket
+      //  rl.close();
+        break;
+
       case "close":
         console.log("Cerrando conexión.");
-        sendCommand(mockTest["fold"]);
+        sendCommand(mockTest["close"]);
         // socket.close();  // Cierra la conexión WebSocket
         rl.close();
         break;
@@ -102,20 +108,21 @@ socket.addEventListener("open", (event) => {
     }
   };
 
-  // Función para solicitar un comando y manejarlo
   const promptCommand = () => {
     const askCommand = () => {
-      rl.question("Ingrese un comando: ", (command) => {
+      rl.question("Type a command: ", (command) => {
         handleCommand(command);
 
-        if (
-          command.toLowerCase() !== "cerrar" &&
-          command.toLowerCase() !== "close"
-        ) {
-          askCommand();
-        } else {
-          rl.close();
-        }
+        askCommand();
+
+        // if (
+        //   command.toLowerCase() !== "cerrar" &&
+        //   command.toLowerCase() !== "close"
+        // ) {
+        //   askCommand();
+        // } else {
+        //   rl.close();
+        // }
       });
     };
 

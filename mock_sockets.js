@@ -26,6 +26,11 @@ const fold = {
   action: "fold",
 };
 
+//Close
+const close = {
+  action: "close",
+};
+
 //Log
 const log = {
   action: "log",
@@ -50,3 +55,4 @@ exports.dealtPrivateCards = dealtPrivateCards;
 exports.log = log;
 exports.sendMessage = sendMessage;
 exports.fold = fold
+exports.close = close

@@ -96,6 +96,7 @@ class Match {
 
   fold(thisSocketId) {
     console.log("MATCH - fold");
+    this.dealer.talkToPLayerById(thisSocketId, 'bye amigo')
 
     const index = this.players.findIndex(
       (player) => player.id === thisSocketId
@@ -103,6 +104,7 @@ class Match {
     if (index !== -1) {
       this.players.splice(index, 1)[0];
     }
+    
   }
 
   startGame() {

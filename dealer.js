@@ -63,12 +63,28 @@ class Dealer {
     return foundPlayer;
   }
 
+  getPlayerById(number) {
+    console.log("dealer - getPlayerById");
+    const foundPlayer = this.players.find((myPlayer) => myPlayer.id === number);
+    return foundPlayer;
+  }
+
   hasPlayerBet(playerNUmber) {
     const playerToCheck = this.getPlayerByNumber(playerNUmber);
     if (playerToCheck) {
       return playerToCheck.getThisGameBet() !== 0;
     } else {
       return 0;
+    }
+  }
+
+  talkToPLayerById(idNumber, targetMessage) {
+    try {
+      console.log("MATCH - talkToPLayerById " + idNumber);
+      const targetSocket = Socket.getSocket(idNumber);
+      targetSocket.socket.send(JSON.stringify({ message: targetMessage }));
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -83,7 +99,7 @@ class Dealer {
         targetSocket.socket.send(JSON.stringify({ message: targetMessage }));
       }
     } catch (error) {
-      console.log(error); 
+      console.log(error);
     }
   }
 
