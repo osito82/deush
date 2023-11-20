@@ -46,9 +46,13 @@ class Dealer {
     console.log("dealer - dealCards");
 
     const burnedCard = this.deck.shift();
-    this.deck.push(burnedCard); //
+    this.deck.push(burnedCard);
 
     this.dealCardsEachPlayer(2);
+  }
+
+  hasMinimunPlayers() {
+    return this.players.length >= 2;
   }
 
   getPlayerByNumber(number) {
@@ -61,7 +65,11 @@ class Dealer {
 
   hasPlayerBet(playerNUmber) {
     const playerToCheck = this.getPlayerByNumber(playerNUmber);
-    return playerToCheck.getThisGameBet() !== 0;
+    if (playerToCheck) {
+      return playerToCheck.getThisGameBet() !== 0;
+    } else {
+      return 0;
+    }
   }
 
   talkToPLayer(playerNumber, targetMessage) {
@@ -75,7 +83,7 @@ class Dealer {
         targetSocket.socket.send(JSON.stringify({ message: targetMessage }));
       }
     } catch (error) {
-      console.log(error); //todo
+      console.log(error); 
     }
   }
 
@@ -88,17 +96,11 @@ class Dealer {
       }
     } catch (error) {
       console.log(error);
-      // todo
     }
   }
 
   showCards() {
-    // console.log('sssssssshpw', this.cards)
-    //log.
     return this.cards;
-    // console.log("dealer - showCards");
-    // console.log("dealer deck", this.deck);
-    // console.log("dealer cards ", this.cards);
   }
 }
 

@@ -47,14 +47,26 @@ wss.on("connection", (ws) => {
     }
 
     if (jsonData && jsonData.action === "signUp") {
-      log.add({ step: "1. Sign Up" });
+      console.log(match.players);
+      log.add({ step: "Sign Up" });
       match.signUpPlayer(jsonData, thisSocket.id);
+    }
+
+    if (jsonData && jsonData.action === "fold") {
+      log.add({ step: "Fold" });
+      match.fold(thisSocket.id);
+
+      const targetSocket = Socket.getSocket(thisSocket.id);
+
+      if (targetSocket && targetSocket.socket) {
+        targetSocket.socket.terminate();
+      }
     }
 
     if (jsonData && jsonData.action === "initialBet") {
       log.add({ step: "Initial Bet" });
       const chipsToBet = jsonData.chipsToBet;
-      
+
       match.initialBet(thisSocket.id, chipsToBet);
     }
 
@@ -71,18 +83,7 @@ wss.on("connection", (ws) => {
 
     if (jsonData && jsonData.action === "log") {
       log.print();
-   //   ws.send(log.get());
-    }
-  });
-
-  // Manejar cierre de conexión
-  ws.on("close", () => {
-    console.log(`Conexión cerrada para el jugador ${thisSocket.id}`);
-
-    // Remove user when disconects
-    const index = match.players.indexOf(thisSocket);
-    if (index !== -1) {
-      match.players.splice(index, 1);
+      //   ws.send(log.get());
     }
   });
 });

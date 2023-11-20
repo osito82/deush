@@ -26,8 +26,8 @@ socket.addEventListener("open", (event) => {
 
       case "initialBet":
       case "ib":
-      //case "3":
-        
+        //case "3":
+
         rl.question(
           " - Money to Bet: ",
           (chipsToBet) => {
@@ -59,9 +59,12 @@ socket.addEventListener("open", (event) => {
         sendCommand(mockTest["askCard"]);
         break;
 
+      case "fold":
+      case "fd":
       case "close":
         console.log("Cerrando conexión.");
-        socket.close();
+        sendCommand(mockTest["fold"]);
+        // socket.close();  // Cierra la conexión WebSocket
         rl.close();
         break;
 
@@ -116,7 +119,9 @@ socket.addEventListener("open", (event) => {
       });
     };
 
+    // if (!rl.closed) {
     askCommand();
+    // }
   };
 
   promptCommand();

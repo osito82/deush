@@ -94,17 +94,35 @@ class Match {
     }
   }
 
+  fold(thisSocketId) {
+    console.log("MATCH - fold");
+
+    const index = this.players.findIndex(
+      (player) => player.id === thisSocketId
+    );
+    if (index !== -1) {
+      this.players.splice(index, 1)[0];
+    }
+  }
+
   startGame() {
     console.log("MATCH - startGame");
 
     //Sign Up Min 2 Playes
-    if (!this.stepChecker.checkStep("signUp")) {
+
+    console.log(
+      !this.stepChecker.checkStep("signUp"),
+      !this.dealer.hasMinimunPlayers()
+    );
+    if (
+      !this.stepChecker.checkStep("signUp") &&
+      !this.dealer.hasMinimunPlayers()
+    ) {
       this.dealer.talkToAllPlayers("Minimun 2 Players to Start");
     }
 
     //Blinds
     const timerAskBlinds = () => {
-      
       if (
         !this.stepChecker.checkStep("bigBlind") ||
         !this.stepChecker.checkStep("smallBlind")

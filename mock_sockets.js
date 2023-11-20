@@ -21,6 +21,11 @@ const startGame = {
   action: "startGame",
 };
 
+//Fold
+const fold = {
+  action: "fold",
+};
+
 //Log
 const log = {
   action: "log",
@@ -44,3 +49,4 @@ exports.initialBet = initialBet;
 exports.dealtPrivateCards = dealtPrivateCards;
 exports.log = log;
 exports.sendMessage = sendMessage;
+exports.fold = fold
