@@ -48,7 +48,7 @@ class Match {
   dealtPrivateCards() {
     console.log("MATCH - dealtPrivateCards");
     this.dealer.dealCardsEachPlayer(2);
-
+    this.stepChecker.passedStep("dealPrivateCards");
     log.add({ players: this.players });
   }
 
@@ -96,7 +96,7 @@ class Match {
 
   fold(thisSocketId) {
     console.log("MATCH - fold");
-    this.dealer.talkToPLayerById(thisSocketId, 'bye amigo')
+    this.dealer.talkToPLayerById(thisSocketId, "bye amigo");
 
     const index = this.players.findIndex(
       (player) => player.id === thisSocketId
@@ -104,18 +104,12 @@ class Match {
     if (index !== -1) {
       this.players.splice(index, 1)[0];
     }
-    
   }
 
   startGame() {
     console.log("MATCH - startGame");
 
     //Sign Up Min 2 Playes
-
-    console.log(
-      !this.stepChecker.checkStep("signUp"),
-      !this.dealer.hasMinimunPlayers()
-    );
     if (
       !this.stepChecker.checkStep("signUp") &&
       !this.dealer.hasMinimunPlayers()
@@ -123,19 +117,30 @@ class Match {
       this.dealer.talkToAllPlayers("Minimun 2 Players to Start");
     }
 
+    //!this.stepChecker.isAllowedTo("blinds")
     //Blinds
-    const timerAskBlinds = () => {
-      if (
-        !this.stepChecker.checkStep("bigBlind") ||
-        !this.stepChecker.checkStep("smallBlind")
-      ) {
-        this.askForBets("blinds");
-      } else {
-        clearInterval(intervalId);
-      }
-    };
+    if (this.stepChecker.isAllowedTo("blinds")) {
+      const timerAskBlinds = () => {
+        if (
+          !this.stepChecker.checkStep("bigBlind") ||
+          !this.stepChecker.checkStep("smallBlind")
+        ) {
+          this.askForBets("blinds");
+        } else {
+          clearInterval(intervalId);
+        }
+      };
 
-    const intervalId = setInterval(timerAskBlinds, 10000);
+      const intervalId = setInterval(timerAskBlinds, 10000);
+    }
+
+    //Deal Private Cards
+    // console.log("Deal Private Cards");
+    console.log(this.stepChecker.isAllowedTo("dealPrivateCards"), "xxx");
+    if (this.stepChecker.isAllowedTo("dealPrivateCards")) {
+      //console.log("holis");
+      this.dealtPrivateCards();
+    }
 
     //   if (this.dealer.hasPlayerBet(1) && this.dealer.hasPlayerBet(2))
 

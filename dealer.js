@@ -56,7 +56,6 @@ class Dealer {
   }
 
   getPlayerByNumber(number) {
-    console.log("dealer - getPlayerByNumber");
     const foundPlayer = this.players.find(
       (myPlayer) => myPlayer.playerNumber == number
     );
@@ -64,7 +63,6 @@ class Dealer {
   }
 
   getPlayerById(number) {
-    console.log("dealer - getPlayerById");
     const foundPlayer = this.players.find((myPlayer) => myPlayer.id === number);
     return foundPlayer;
   }

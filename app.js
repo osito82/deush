@@ -47,7 +47,6 @@ wss.on("connection", (ws) => {
     }
 
     if (jsonData && jsonData.action === "signUp") {
-      console.log(match.players);
       log.add({ step: "Sign Up" });
       match.signUpPlayer(jsonData, thisSocket.id);
     }
@@ -55,18 +54,10 @@ wss.on("connection", (ws) => {
     if (jsonData && jsonData.action === "fold") {
       log.add({ step: "Fold" });
       match.fold(thisSocket.id);
-
-      //const targetSocket = Socket.getSocket(thisSocket.id);
-
-      // if (targetSocket && targetSocket.socket) {
-      //   targetSocket.socket.terminate();
-      // }
     }
-
 
     if (jsonData && jsonData.action === "close") {
       log.add({ step: "Close" });
-      //match.fold(thisSocket.id);
 
       const targetSocket = Socket.getSocket(thisSocket.id);
 
